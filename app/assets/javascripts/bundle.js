@@ -84,9 +84,27 @@
 	    _createClass(Main, [{
 	        key: 'addTweet',
 	        value: function addTweet(tweetToAdd) {
-	            var newTweetsList = this.state.tweetsList;
-	            newTweetsList.unshift({ id: Date.now(), name: "Guy Incognito", body: tweetToAdd });
-	            this.setState({ tweetsList: newTweetsList });
+	            var _this2 = this;
+	
+	            $.post("/tweets", { body: tweetToAdd }).success(function (savedTweet) {
+	                var newTweetsList = _this2.state.tweetsList;
+	                newTweetsList.unshift(savedTweet);
+	                _this2.setState({ tweetsList: newTweetsList });
+	            }).error(function (error) {
+	                return console.log(error);
+	            });
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _this3 = this;
+	
+	            console.log("Getting tweets!");
+	            $.ajax("/tweets").success(function (data) {
+	                return _this3.setState({ tweetsList: data });
+	            }).error(function (error) {
+	                return console.log(error);
+	            });
 	        }
 	    }, {
 	        key: 'render',
@@ -104,7 +122,10 @@
 	}(React.Component);
 	
 	var documentReady = function documentReady() {
-	    ReactDOM.render(React.createElement(Main, null), document.getElementById('react'));
+	    var reactNode = document.getElementById('react');
+	    if (reactNode) {
+	        ReactDOM.render(React.createElement(Main, null), reactNode);
+	    }
 	};
 	
 	$(documentReady);
@@ -286,6 +307,11 @@
 	                    "span",
 	                    { className: "title" },
 	                    this.props.name
+	                ),
+	                React.createElement(
+	                    "time",
+	                    null,
+	                    this.props.created_at
 	                ),
 	                React.createElement(
 	                    "p",
