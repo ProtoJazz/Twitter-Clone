@@ -82,6 +82,17 @@
 	    }
 	
 	    _createClass(Main, [{
+	        key: 'formattedTweets',
+	        value: function formattedTweets(tweetsList) {
+	            var formattedList = tweetsList.map(function (tweet) {
+	                tweet.formattedDate = moment(tweet.created_at).fromNow();
+	                return tweet;
+	            });
+	            return {
+	                tweetsList: formattedList
+	            };
+	        }
+	    }, {
 	        key: 'addTweet',
 	        value: function addTweet(tweetToAdd) {
 	            var _this2 = this;
@@ -89,7 +100,7 @@
 	            $.post("/tweets", { body: tweetToAdd }).success(function (savedTweet) {
 	                var newTweetsList = _this2.state.tweetsList;
 	                newTweetsList.unshift(savedTweet);
-	                _this2.setState({ tweetsList: newTweetsList });
+	                _this2.setState(_this2.formattedTweets(newTweetsList));
 	            }).error(function (error) {
 	                return console.log(error);
 	            });
@@ -101,7 +112,7 @@
 	
 	            console.log("Getting tweets!");
 	            $.ajax("/tweets").success(function (data) {
-	                return _this3.setState({ tweetsList: data });
+	                return _this3.setState(_this3.formattedTweets(data));
 	            }).error(function (error) {
 	                return console.log(error);
 	            });
@@ -298,11 +309,7 @@
 	            return React.createElement(
 	                "li",
 	                { className: "collection-item avatar" },
-	                React.createElement(
-	                    "i",
-	                    { className: "material-icons circle green" },
-	                    "person_pin"
-	                ),
+	                React.createElement("img", { className: "circle", src: this.props.gravatar }),
 	                React.createElement(
 	                    "span",
 	                    { className: "title" },
@@ -311,7 +318,7 @@
 	                React.createElement(
 	                    "time",
 	                    null,
-	                    this.props.created_at
+	                    this.props.formattedDate
 	                ),
 	                React.createElement(
 	                    "p",
