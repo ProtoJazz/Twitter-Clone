@@ -5,7 +5,7 @@ let mockTweets = [
     {id: 1, name: 'Bob Belcher', body: "Im tweeting! #bobsBurgers"},
     {id: 2, name: 'Louise Belcher', body: "Proud of you dad!"},
     {id: 3, name: 'Gene Belcher', body: 'Explains why this site is so slow suddenly. He\'s dadding it up!'}
-]
+];
 class Main extends React.Component {
     constructor (props) {
         super(props);
@@ -15,7 +15,7 @@ class Main extends React.Component {
         let formattedList = tweetsList.map(tweet =>{
             tweet.formattedDate = moment(tweet.created_at).fromNow();
             return tweet;
-        })
+        });
         return {
             tweetsList: formattedList
         };
